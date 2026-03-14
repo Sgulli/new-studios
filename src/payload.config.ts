@@ -10,13 +10,15 @@ import {
   UnorderedListFeature,
   lexicalEditor,
 } from '@payloadcms/richtext-lexical'
-import path from 'path'
+import path from 'node:path'
 import { buildConfig } from 'payload'
-import { fileURLToPath } from 'url'
+import { fileURLToPath } from 'node:url'
 
 import { Categories } from '@/collections/Categories'
 import { Media } from '@/collections/Media'
+import { Members } from '@/collections/Members'
 import { Pages } from '@/collections/Pages'
+import { Plans } from '@/collections/Plans'
 import { Users } from '@/collections/Users'
 import { Footer } from '@/globals/Footer'
 import { Header } from '@/globals/Header'
@@ -37,7 +39,7 @@ export default buildConfig({
     },
     user: Users.slug,
   },
-  collections: [Users, Pages, Categories, Media],
+  collections: [Users, Pages, Categories, Media, Members, Plans],
   db: postgresAdapter({
     pool: {
       connectionString: process.env.DATABASE_URL || '',
