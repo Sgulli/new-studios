@@ -24,6 +24,7 @@ import { Plans } from '@/collections/plans'
 import { Users } from '@/collections/users'
 import { Footer } from '@/globals/footer'
 import { Header } from '@/globals/header'
+import sharp from 'sharp'
 import { plugins } from './plugins'
 
 const filename = fileURLToPath(import.meta.url)
@@ -32,20 +33,19 @@ const dirname = path.dirname(filename)
 export default buildConfig({
   admin: {
     components: {
-      // The `BeforeLogin` component renders a message that you see while logging into your admin panel.
-      // Feel free to delete this at any time. Simply remove the line below and the import `BeforeLogin` statement on line 15.
       beforeLogin: ['@/components/before-login#BeforeLogin'],
-      // The `BeforeDashboard` component renders the 'welcome' block that you see after logging into your admin panel.
-      // Feel free to delete this at any time. Simply remove the line below and the import `BeforeDashboard` statement on line 15.
       beforeDashboard: ['@/components/before-dashboard#BeforeDashboard'],
+      views: {
+        dashboard: {
+          Component: '@/components/admin/dashboard#Dashboard',
+        },
+      },
     },
     user: Users.slug,
   },
   collections: [Users, Pages, Categories, Media, Documents, Members, Plans, Inquiries],
   db: postgresAdapter({
-    pool: {
-      connectionString: process.env.DATABASE_URL || '',
-    },
+    pool: { connectionString: process.env.DATABASE_URL || '' },
   }),
   editor: lexicalEditor({
     features: () => {
@@ -93,5 +93,5 @@ export default buildConfig({
   // Sharp is now an optional dependency -
   // if you want to resize images, crop, set focal point, etc.
   // make sure to install it and pass it to the config.
-  // sharp,
+  sharp,
 })

@@ -2,6 +2,7 @@
 import { CMSLink } from '@/components/link'
 import { Cart } from '@/components/cart'
 import { OpenCartButton } from '@/components/cart/open-cart'
+import { ECOMMERCE_ENABLED } from '@/lib/constants'
 import Link from 'next/link'
 import React, { Suspense } from 'react'
 
@@ -54,11 +55,13 @@ export function HeaderClient({ header }: Props) {
             ) : null}
           </div>
 
-          <div className="flex justify-end md:w-1/3 gap-4">
-            <Suspense fallback={<OpenCartButton />}>
-              <Cart />
-            </Suspense>
-          </div>
+          {ECOMMERCE_ENABLED && (
+            <div className="flex justify-end md:w-1/3 gap-4">
+              <Suspense fallback={<OpenCartButton />}>
+                <Cart />
+              </Suspense>
+            </div>
+          )}
         </div>
       </nav>
     </div>

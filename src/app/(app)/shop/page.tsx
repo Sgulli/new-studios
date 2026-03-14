@@ -1,7 +1,9 @@
 import { Grid } from '@/components/grid'
 import { ProductGridItem } from '@/components/product-grid-item'
+import { ECOMMERCE_ENABLED } from '@/lib/constants'
 import configPromise from '@payload-config'
 import { getPayload } from 'payload'
+import { redirect } from 'next/navigation'
 import React from 'react'
 
 export const metadata = {
@@ -16,6 +18,7 @@ type Props = {
 }
 
 export default async function ShopPage({ searchParams }: Props) {
+  if (!ECOMMERCE_ENABLED) redirect('/')
   const { q: searchValue, sort, category } = await searchParams
   const payload = await getPayload({ config: configPromise })
 

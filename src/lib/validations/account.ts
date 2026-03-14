@@ -7,9 +7,10 @@ const accountProfileSchema = v.object({
   passwordConfirm: v.optional(v.string()),
 })
 
+type AccountProfile = v.InferOutput<typeof accountProfileSchema>
+
 const passwordMatchCheck = v.check(
-  (input: { password?: string; passwordConfirm?: string }) =>
-    (input.password ?? '') === (input.passwordConfirm ?? ''),
+  (input: AccountProfile) => (input.password ?? '') === (input.passwordConfirm ?? ''),
   'The passwords do not match.',
 )
 

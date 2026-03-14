@@ -4,11 +4,12 @@ import { RenderBlocks } from '@/blocks/render-blocks'
 import { GridTileImage } from '@/components/grid/tile'
 import { Gallery } from '@/components/product/gallery'
 import { ProductDescription } from '@/components/product/product-description'
+import { ECOMMERCE_ENABLED } from '@/lib/constants'
 import configPromise from '@payload-config'
 import { getPayload } from 'payload'
 import { draftMode } from 'next/headers'
 import Link from 'next/link'
-import { notFound } from 'next/navigation'
+import { notFound, redirect } from 'next/navigation'
 import React, { Suspense } from 'react'
 import { Button } from '@/components/ui/button'
 import { ChevronLeftIcon } from 'lucide-react'
@@ -60,6 +61,7 @@ export async function generateMetadata({ params }: Args): Promise<Metadata> {
 }
 
 export default async function ProductPage({ params }: Args) {
+  if (!ECOMMERCE_ENABLED) redirect('/')
   const { slug } = await params
   const product = await queryProductBySlug({ slug })
 

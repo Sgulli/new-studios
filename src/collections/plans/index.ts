@@ -1,6 +1,7 @@
 import type { CollectionConfig } from 'payload'
 
 import { adminOrStaff } from '@/access/admin-or-staff'
+import { ECOMMERCE_ENABLED } from '@/lib/constants'
 
 export const Plans: CollectionConfig = {
   slug: 'plans',
@@ -13,6 +14,7 @@ export const Plans: CollectionConfig = {
   admin: {
     defaultColumns: ['name', 'price', 'duration', 'durationUnit', 'active', 'createdAt'],
     group: 'Gym',
+    hidden: !ECOMMERCE_ENABLED,
     useAsTitle: 'name',
   },
   fields: [

@@ -1,7 +1,9 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
+import { ECOMMERCE_ENABLED } from '@/lib/constants'
 import configPromise from '@payload-config'
 import { getPayload } from 'payload'
+import { redirect } from 'next/navigation'
 
 const siteName = process.env.SITE_NAME ?? 'New Studios'
 
@@ -24,6 +26,7 @@ function formatDuration(duration: number, unit: string): string {
 }
 
 export default async function PricingPage() {
+  if (!ECOMMERCE_ENABLED) redirect('/')
   const payload = await getPayload({ config: configPromise })
   const { docs: plans } = await payload.find({
     collection: 'plans',

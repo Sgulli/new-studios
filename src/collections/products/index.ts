@@ -20,11 +20,14 @@ import {
 } from '@payloadcms/richtext-lexical'
 import { DefaultDocumentIDType, Where } from 'payload'
 
+import { ECOMMERCE_ENABLED } from '@/lib/constants'
+
 export const ProductsCollection: CollectionOverride = ({ defaultCollection }) => ({
   ...defaultCollection,
   admin: {
     ...defaultCollection?.admin,
     defaultColumns: ['title', 'enableVariants', '_status', 'variants.variants'],
+    hidden: !ECOMMERCE_ENABLED,
     livePreview: {
       url: ({ data, req }) =>
         generatePreviewPath({

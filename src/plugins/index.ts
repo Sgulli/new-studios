@@ -10,6 +10,7 @@ import { stripeAdapter } from '@payloadcms/plugin-ecommerce/payments/stripe'
 
 import { Page, Product } from '@/payload-types'
 import { getServerSideURL } from '@/utilities/get-url'
+import { ECOMMERCE_ENABLED } from '@/lib/constants'
 import { ProductsCollection } from '@/collections/products'
 import { adminOrPublishedStatus } from '@/access/admin-or-published-status'
 import { adminOnlyFieldAccess } from '@/access/admin-only-field-access'
@@ -107,6 +108,10 @@ export const plugins: Plugin[] = [
     orders: {
       ordersCollectionOverride: ({ defaultCollection }) => ({
         ...defaultCollection,
+        admin: {
+          ...defaultCollection.admin,
+          hidden: !ECOMMERCE_ENABLED,
+        },
         fields: [
           ...defaultCollection.fields,
           {

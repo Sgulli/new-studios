@@ -2,6 +2,9 @@
 
 import configPromise from '@payload-config'
 import { getPayload } from 'payload'
+import * as v from 'valibot'
+
+import { contactFormSchema } from '@/lib/validations'
 
 export type SubmitResult = { success: true } | { success: false; error?: string }
 
@@ -43,15 +46,14 @@ export type InquiryValues = {
 }
 
 export async function submitInquiryFromValues(values: InquiryValues): Promise<SubmitResult> {
-  const name = values.name?.trim()
-  const email = values.email?.trim()
-  const subject = values.subject?.trim()
-  const message = values.message?.trim()
-  const phone = values.phone?.trim() || undefined
-
-  if (!name || !email || !subject || !message) {
-    return { success: false, error: 'Please fill in all required fields.' }
+  const result = v.safeParse(contactFormSchema, values, { abortPipeEarly: true })
+  if (!result.success) {
+    const firstMessage = result.issues[0]?.message ?? 'Please fill in all required fields.'
+    return { success: false, error: firstMessage }
   }
+
+  const { name, email, subject, message } = result.output
+  const phone = result.output.phone || undefined
 
   try {
     const payload = await getPayload({ config: configPromise })

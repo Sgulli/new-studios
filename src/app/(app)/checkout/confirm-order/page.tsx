@@ -1,7 +1,9 @@
 import type { Metadata } from 'next'
 
+import { ECOMMERCE_ENABLED } from '@/lib/constants'
 import { mergeOpenGraph } from '@/utilities/merge-open-graph'
-import React, { Fragment } from 'react'
+import { redirect } from 'next/navigation'
+import React from 'react'
 import { ConfirmOrder } from '@/components/checkout/confirm-order'
 
 type SearchParams = Promise<{ [key: string]: string | string[] | undefined }>
@@ -11,6 +13,7 @@ export default async function ConfirmOrderPage({
 }: {
   searchParams: SearchParams
 }) {
+  if (!ECOMMERCE_ENABLED) redirect('/')
   const searchParams = await searchParamsPromise
 
   const paymentIntent = searchParams.paymentId

@@ -8,11 +8,7 @@ export const adminOrCustomerOwner: Access = ({ req: { user } }) => {
   }
 
   if (user?.id) {
-    return {
-      customer: {
-        equals: user.id,
-      },
-    }
+    return { customer: { equals: user.id } }
   }
 
   return false
