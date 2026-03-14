@@ -76,6 +76,7 @@ export interface Config {
     pages: Page;
     categories: Category;
     media: Media;
+    documents: Document;
     members: Member;
     plans: Plan;
     forms: Form;
@@ -111,6 +112,7 @@ export interface Config {
     pages: PagesSelect<false> | PagesSelect<true>;
     categories: CategoriesSelect<false> | CategoriesSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
+    documents: DocumentsSelect<false> | DocumentsSelect<true>;
     members: MembersSelect<false> | MembersSelect<true>;
     plans: PlansSelect<false> | PlansSelect<true>;
     forms: FormsSelect<false> | FormsSelect<true>;
@@ -1108,6 +1110,30 @@ export interface Address {
   createdAt: string;
 }
 /**
+ * PDF uploads (e.g. medical certificates).
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "documents".
+ */
+export interface Document {
+  id: number;
+  /**
+   * Short description (e.g. "Medical certificate - Mario Rossi")
+   */
+  alt: string;
+  updatedAt: string;
+  createdAt: string;
+  url?: string | null;
+  thumbnailURL?: string | null;
+  filename?: string | null;
+  mimeType?: string | null;
+  filesize?: number | null;
+  width?: number | null;
+  height?: number | null;
+  focalX?: number | null;
+  focalY?: number | null;
+}
+/**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "members".
  */
@@ -1124,6 +1150,30 @@ export interface Member {
    * Optional, for age-based pricing or eligibility
    */
   dateOfBirth?: string | null;
+  /**
+   * Current subscription plan
+   */
+  plan?: (number | null) | Plan;
+  /**
+   * Start of current subscription period
+   */
+  subscriptionStart?: string | null;
+  /**
+   * End of current subscription period
+   */
+  subscriptionEnd?: string | null;
+  /**
+   * Computed: Active / Expired / None
+   */
+  subscriptionStatus?: string | null;
+  /**
+   * Medical certificate PDF
+   */
+  medicalCertificate?: (number | null) | Document;
+  /**
+   * Expiry date of the medical certificate
+   */
+  medicalCertificateExpiry?: string | null;
   /**
    * Internal notes about the member
    */
@@ -1220,6 +1270,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'media';
         value: number | Media;
+      } | null)
+    | ({
+        relationTo: 'documents';
+        value: number | Document;
       } | null)
     | ({
         relationTo: 'members';
@@ -1542,6 +1596,24 @@ export interface MediaSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "documents_select".
+ */
+export interface DocumentsSelect<T extends boolean = true> {
+  alt?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  url?: T;
+  thumbnailURL?: T;
+  filename?: T;
+  mimeType?: T;
+  filesize?: T;
+  width?: T;
+  height?: T;
+  focalX?: T;
+  focalY?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "members_select".
  */
 export interface MembersSelect<T extends boolean = true> {
@@ -1550,6 +1622,12 @@ export interface MembersSelect<T extends boolean = true> {
   email?: T;
   phone?: T;
   dateOfBirth?: T;
+  plan?: T;
+  subscriptionStart?: T;
+  subscriptionEnd?: T;
+  subscriptionStatus?: T;
+  medicalCertificate?: T;
+  medicalCertificateExpiry?: T;
   notes?: T;
   updatedAt?: T;
   createdAt?: T;
