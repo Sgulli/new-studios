@@ -3,31 +3,39 @@ import { getPayload } from 'payload'
 import clsx from 'clsx'
 import React, { Suspense } from 'react'
 
-import { FilterList } from './filter'
-import { CategoryItem } from './categories.client'
+import { Item } from './item'
 
-async function CategoryList() {
+async function List() {
   const payload = await getPayload({ config: configPromise })
-
-  const categories = await payload.find({
+  const categoriesData = await payload.find({
     collection: 'categories',
     sort: 'title',
+    select: {
+      title: true,
+      slug: true,
+    },
+  })
+
+  const categories = categoriesData.docs?.map((category) => {
+    return {
+      href: `/shop/${category.slug}`,
+      title: category.title,
+    }
   })
 
   return (
-    <div>
-      <h3 className="text-xs mb-2 text-neutral-500 dark:text-neutral-400">Category</h3>
-
-      <ul>
-        {categories.docs.map((category) => {
-          return (
-            <li key={category.id}>
-              <CategoryItem category={category} />
-            </li>
-          )
-        })}
-      </ul>
-    </div>
+    <React.Fragment>
+      <nav>
+        <ul className="flex gap-3">
+          <Item title="All" href="/shop" />
+          <Suspense fallback={null}>
+            {categories.map((category) => {
+              return <Item {...category} key={category.href} />
+            })}
+          </Suspense>
+        </ul>
+      </nav>
+    </React.Fragment>
   )
 }
 
@@ -35,7 +43,7 @@ const skeleton = 'mb-3 h-4 w-5/6 animate-pulse rounded'
 const activeAndTitles = 'bg-neutral-800 dark:bg-neutral-300'
 const items = 'bg-neutral-400 dark:bg-neutral-700'
 
-export function Categories() {
+export function CategoryTabs() {
   return (
     <Suspense
       fallback={
@@ -53,7 +61,7 @@ export function Categories() {
         </div>
       }
     >
-      <CategoryList />
+      <List />
     </Suspense>
   )
 }
