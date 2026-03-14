@@ -5,7 +5,7 @@ import { useState } from 'react'
 import { contactFormSchema, validateWithSchema } from '@/lib/validations'
 import { submitInquiryFromValues } from '@/app/(app)/contact/actions'
 import { FieldGroup } from '@/components/ui/field'
-import { FormField } from '@/components/forms/FormField'
+import { FormField } from '@/components/forms/form-field'
 import { Button } from '@/components/ui/button'
 
 type Status = 'idle' | 'loading' | 'success' | 'error'

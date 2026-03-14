@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { ContactForm } from './ContactForm'
+import { ContactForm } from '@/components/forms/contact-form'
 
 const siteName = process.env.SITE_NAME ?? 'New Studios'
 

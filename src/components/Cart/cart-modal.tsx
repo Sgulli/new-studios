@@ -1,6 +1,6 @@
 'use client'
 
-import { Price } from '@/components/Price'
+import { Price } from '@/components/price'
 import {
   Sheet,
   SheetContent,

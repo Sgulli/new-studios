@@ -1,9 +1,9 @@
-import { Media } from '@/components/Media'
-import { OrderStatus } from '@/components/OrderStatus'
-import { Price } from '@/components/Price'
+import { Media } from '@/components/media'
+import { OrderStatus } from '@/components/order-status'
+import { Price } from '@/components/price'
 import { Button } from '@/components/ui/button'
 import { Media as MediaType, Order, Product, Variant } from '@/payload-types'
-import { formatDateTime } from '@/utilities/formatDateTime'
+import { formatDateTime } from '@/utilities/format-date-time'
 import Link from 'next/link'
 
 type Props = {

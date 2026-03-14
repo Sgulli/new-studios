@@ -5,7 +5,7 @@ import { Label } from '@/components/ui/label'
 import { Textarea as TextAreaComponent } from '@/components/ui/textarea'
 import React from 'react'
 
-import { Width } from '../Width'
+import { Width } from '../width'
 import { capitaliseFirstLetter } from '@/utilities/capitalise-first-letter'
 import { FormItem } from '@/components/forms/form-item'
 import { FormError } from '@/components/forms/form-error'

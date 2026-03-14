@@ -13,8 +13,7 @@ function getString(formData: FormData, key: string): string {
 export async function submitInquiry(formData: FormData): Promise<SubmitResult> {
   const name = getString(formData, 'name')
   const email = getString(formData, 'email')
-  const phone = formData.get('phone')
-  const phoneStr = typeof phone === 'string' ? phone.trim() : undefined
+  const phone = getString(formData, 'phone')
   const subject = getString(formData, 'subject')
   const message = getString(formData, 'message')
 
@@ -26,13 +25,7 @@ export async function submitInquiry(formData: FormData): Promise<SubmitResult> {
     const payload = await getPayload({ config: configPromise })
     await payload.create({
       collection: 'inquiries',
-      data: {
-        name,
-        email,
-        phone: phoneStr || undefined,
-        subject,
-        message,
-      },
+      data: { name, email, phone, subject, message },
     })
     return { success: true }
   } catch (err) {

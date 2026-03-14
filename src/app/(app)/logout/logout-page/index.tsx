@@ -1,6 +1,6 @@
 'use client'
 
-import { useAuth } from '@/providers/Auth'
+import { useAuth } from '@/providers/auth'
 import Link from 'next/link'
 import React, { Fragment, useEffect, useState } from 'react'
 

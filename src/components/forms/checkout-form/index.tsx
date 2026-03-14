@@ -1,6 +1,6 @@
 'use client'
 
-import { Message } from '@/components/Message'
+import { Message } from '@/components/message'
 import { Button } from '@/components/ui/button'
 import { PaymentElement, useElements, useStripe } from '@stripe/react-stripe-js'
 import { useRouter } from 'next/navigation'

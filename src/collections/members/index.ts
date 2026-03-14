@@ -1,6 +1,6 @@
 import type { CollectionConfig } from 'payload'
 
-import { adminOrStaff } from '@/access/adminOrStaff'
+import { adminOrStaff } from '@/access/admin-or-staff'
 
 export type SubscriptionStatus = 'active' | 'expired' | 'none'
 

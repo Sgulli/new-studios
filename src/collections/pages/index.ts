@@ -1,18 +1,18 @@
 import type { CollectionConfig } from 'payload'
 
-import { Banner } from '@/blocks/Banner/config'
-import { Carousel } from '@/blocks/Carousel/config'
-import { ThreeItemGrid } from '@/blocks/ThreeItemGrid/config'
-import { generatePreviewPath } from '@/utilities/generatePreviewPath'
-import { adminOnly } from '@/access/adminOnly'
-import { Archive } from '@/blocks/ArchiveBlock/config'
-import { CallToAction } from '@/blocks/CallToAction/config'
-import { Content } from '@/blocks/Content/config'
-import { FormBlock } from '@/blocks/Form/config'
-import { MediaBlock } from '@/blocks/MediaBlock/config'
+import { Banner } from '@/blocks/banner/config'
+import { Carousel } from '@/blocks/carousel/config'
+import { ThreeItemGrid } from '@/blocks/three-item-grid/config'
+import { generatePreviewPath } from '@/utilities/generate-preview-path'
+import { adminOnly } from '@/access/admin-only'
+import { Archive } from '@/blocks/archive-block/config'
+import { CallToAction } from '@/blocks/call-to-action/config'
+import { Content } from '@/blocks/content/config'
+import { FormBlock } from '@/blocks/form/config'
+import { MediaBlock } from '@/blocks/media-block/config'
 import { hero } from '@/fields/hero'
 import { slugField } from 'payload'
-import { adminOrPublishedStatus } from '@/access/adminOrPublishedStatus'
+import { adminOrPublishedStatus } from '@/access/admin-or-published-status'
 import {
   MetaDescriptionField,
   MetaImageField,
@@ -20,7 +20,7 @@ import {
   OverviewField,
   PreviewField,
 } from '@payloadcms/plugin-seo/fields'
-import { revalidatePage, revalidateDelete } from './hooks/revalidatePage'
+import { revalidatePage, revalidateDelete } from './hooks/revalidate-page'
 
 export const Pages: CollectionConfig = {
   slug: 'pages',

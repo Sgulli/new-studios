@@ -2,7 +2,7 @@
 
 import configPromise from '@payload-config'
 import { getPayload } from 'payload'
-import { getServerSideURL } from '@/utilities/getURL'
+import { getServerSideURL } from '@/utilities/get-url'
 
 type SendOrderAccessEmailArgs = {
   email: string

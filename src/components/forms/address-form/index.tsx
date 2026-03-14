@@ -9,7 +9,7 @@ import {
   FieldGroup,
   FieldLabel,
 } from '@/components/ui/field'
-import { FormField } from '@/components/forms/FormField'
+import { FormField } from '@/components/forms/form-field'
 import { useAddresses, defaultCountries as supportedCountries } from '@payloadcms/plugin-ecommerce/client/react'
 import type { Address, Config } from '@/payload-types'
 import {

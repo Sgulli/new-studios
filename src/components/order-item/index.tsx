@@ -1,8 +1,8 @@
-import { OrderStatus } from '@/components/OrderStatus'
-import { Price } from '@/components/Price'
+import { OrderStatus } from '@/components/order-status'
+import { Price } from '@/components/price'
 import { Button } from '@/components/ui/button'
 import { Order } from '@/payload-types'
-import { formatDateTime } from '@/utilities/formatDateTime'
+import { formatDateTime } from '@/utilities/format-date-time'
 import Link from 'next/link'
 
 type Props = {

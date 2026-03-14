@@ -3,7 +3,7 @@
 import { Button } from '@/components/ui/button'
 import type { Product } from '@/payload-types'
 
-import { createUrl } from '@/utilities/createUrl'
+import { createUrl } from '@/utilities/create-url'
 import clsx from 'clsx'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import React from 'react'

@@ -6,7 +6,7 @@ import {
   lexicalEditor,
 } from '@payloadcms/richtext-lexical'
 
-import { adminOnly } from '@/access/adminOnly'
+import { adminOnly } from '@/access/admin-only'
 
 export const Media: CollectionConfig = {
   admin: {

@@ -11,19 +11,19 @@ import {
   lexicalEditor,
 } from '@payloadcms/richtext-lexical'
 import path from 'node:path'
-import { buildConfig } from 'payload'
 import { fileURLToPath } from 'node:url'
+import { buildConfig } from 'payload'
 
-import { Categories } from '@/collections/Categories'
-import { Documents } from '@/collections/Documents'
-import { Inquiries } from '@/collections/Inquiries'
-import { Media } from '@/collections/Media'
-import { Members } from '@/collections/Members'
-import { Pages } from '@/collections/Pages'
-import { Plans } from '@/collections/Plans'
-import { Users } from '@/collections/Users'
-import { Footer } from '@/globals/Footer'
-import { Header } from '@/globals/Header'
+import { Categories } from '@/collections/categories'
+import { Documents } from '@/collections/documents'
+import { Inquiries } from '@/collections/inquiries'
+import { Media } from '@/collections/media'
+import { Members } from '@/collections/members'
+import { Pages } from '@/collections/pages'
+import { Plans } from '@/collections/plans'
+import { Users } from '@/collections/users'
+import { Footer } from '@/globals/footer'
+import { Header } from '@/globals/header'
 import { plugins } from './plugins'
 
 const filename = fileURLToPath(import.meta.url)
@@ -34,10 +34,10 @@ export default buildConfig({
     components: {
       // The `BeforeLogin` component renders a message that you see while logging into your admin panel.
       // Feel free to delete this at any time. Simply remove the line below and the import `BeforeLogin` statement on line 15.
-      beforeLogin: ['@/components/BeforeLogin#BeforeLogin'],
+      beforeLogin: ['@/components/before-login#BeforeLogin'],
       // The `BeforeDashboard` component renders the 'welcome' block that you see after logging into your admin panel.
       // Feel free to delete this at any time. Simply remove the line below and the import `BeforeDashboard` statement on line 15.
-      beforeDashboard: ['@/components/BeforeDashboard#BeforeDashboard'],
+      beforeDashboard: ['@/components/before-dashboard#BeforeDashboard'],
     },
     user: Users.slug,
   },

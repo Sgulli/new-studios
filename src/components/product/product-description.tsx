@@ -1,14 +1,14 @@
 'use client'
 import type { Product, Variant } from '@/payload-types'
 
-import { RichText } from '@/components/RichText'
-import { AddToCart } from '@/components/Cart/AddToCart'
-import { Price } from '@/components/Price'
+import { RichText } from '@/components/rich-text'
+import { AddToCart } from '@/components/cart/add-to-cart'
+import { Price } from '@/components/price'
 import React, { Suspense } from 'react'
 
 import { VariantSelector } from './variant-selector'
 import { useCurrency } from '@payloadcms/plugin-ecommerce/client/react'
-import { StockIndicator } from '@/components/product/StockIndicator'
+import { StockIndicator } from '@/components/product/stock-indicator'
 
 export function ProductDescription({ product }: { product: Product }) {
   const { currency } = useCurrency()

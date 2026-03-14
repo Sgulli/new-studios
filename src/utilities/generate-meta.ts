@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 
 import type { Page, Product } from '../payload-types'
 
-import { mergeOpenGraph } from './mergeOpenGraph'
+import { mergeOpenGraph } from './merge-open-graph'
 
 export const generateMeta = async (args: { doc: Page | Product }): Promise<Metadata> => {
   const { doc } = args || {}
