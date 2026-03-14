@@ -79,6 +79,7 @@ export interface Config {
     documents: Document;
     members: Member;
     plans: Plan;
+    inquiries: Inquiry;
     forms: Form;
     'form-submissions': FormSubmission;
     addresses: Address;
@@ -115,6 +116,7 @@ export interface Config {
     documents: DocumentsSelect<false> | DocumentsSelect<true>;
     members: MembersSelect<false> | MembersSelect<true>;
     plans: PlansSelect<false> | PlansSelect<true>;
+    inquiries: InquiriesSelect<false> | InquiriesSelect<true>;
     forms: FormsSelect<false> | FormsSelect<true>;
     'form-submissions': FormSubmissionsSelect<false> | FormSubmissionsSelect<true>;
     addresses: AddressesSelect<false> | AddressesSelect<true>;
@@ -1216,6 +1218,23 @@ export interface Plan {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "inquiries".
+ */
+export interface Inquiry {
+  id: number;
+  name: string;
+  email: string;
+  phone?: string | null;
+  /**
+   * Short subject or topic
+   */
+  subject: string;
+  message: string;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "form-submissions".
  */
 export interface FormSubmission {
@@ -1282,6 +1301,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'plans';
         value: number | Plan;
+      } | null)
+    | ({
+        relationTo: 'inquiries';
+        value: number | Inquiry;
       } | null)
     | ({
         relationTo: 'forms';
@@ -1643,6 +1666,19 @@ export interface PlansSelect<T extends boolean = true> {
   duration?: T;
   durationUnit?: T;
   active?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "inquiries_select".
+ */
+export interface InquiriesSelect<T extends boolean = true> {
+  name?: T;
+  email?: T;
+  phone?: T;
+  subject?: T;
+  message?: T;
   updatedAt?: T;
   createdAt?: T;
 }

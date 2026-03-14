@@ -45,3 +45,4 @@ public/documents
 .cursor/
 AGENTS.md
 docker-compose.yml
+.agents

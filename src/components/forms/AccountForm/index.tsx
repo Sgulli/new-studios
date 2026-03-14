@@ -1,16 +1,16 @@
 'use client'
 
+import { useForm } from '@tanstack/react-form'
+import { accountFormSchema, validateWithSchema } from '@/lib/validations'
 import { FormError } from '@/components/forms/FormError'
 import { FormItem } from '@/components/forms/FormItem'
-import { Message } from '@/components/Message'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { User } from '@/payload-types'
+import type { User } from '@/payload-types'
 import { useAuth } from '@/providers/Auth'
 import { useRouter } from 'next/navigation'
-import React, { Fragment, useCallback, useEffect, useRef, useState } from 'react'
-import { useForm } from 'react-hook-form'
+import React, { Fragment, useEffect, useState } from 'react'
 import { toast } from 'sonner'
 
 type FormData = {
@@ -23,74 +23,54 @@ type FormData = {
 export const AccountForm: React.FC = () => {
   const { setUser, user } = useAuth()
   const [changePassword, setChangePassword] = useState(false)
-
-  const {
-    formState: { errors, isLoading, isSubmitting, isDirty },
-    handleSubmit,
-    register,
-    reset,
-    watch,
-  } = useForm<FormData>()
-
-  const password = useRef({})
-  password.current = watch('password', '')
-
   const router = useRouter()
 
-  const onSubmit = useCallback(
-    async (data: FormData) => {
-      if (user) {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/users/${user.id}`, {
-          // Make sure to include cookies with fetch
-          body: JSON.stringify(data),
-          credentials: 'include',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          method: 'PATCH',
-        })
-
-        if (response.ok) {
-          const json = await response.json()
-          setUser(json.doc)
-          toast.success('Successfully updated account.')
-          setChangePassword(false)
-          reset({
-            name: json.doc.name,
-            email: json.doc.email,
-            password: '',
-            passwordConfirm: '',
-          })
-        } else {
-          toast.error('There was a problem updating your account.')
-        }
+  const form = useForm({
+    defaultValues: {
+      name: user?.name ?? '',
+      email: user?.email ?? '',
+      password: '',
+      passwordConfirm: '',
+    },
+    onSubmit: async ({ value }) => {
+      if (!user) return
+      const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/users/${user.id}`, {
+        body: JSON.stringify(value),
+        credentials: 'include',
+        headers: { 'Content-Type': 'application/json' },
+        method: 'PATCH',
+      })
+      if (response.ok) {
+        const json = await response.json()
+        setUser(json.doc)
+        toast.success('Successfully updated account.')
+        setChangePassword(false)
+      } else {
+        toast.error('There was a problem updating your account.')
       }
     },
-    [user, setUser, reset],
-  )
+    validators: {
+      onSubmit: ({ value }) => validateWithSchema(accountFormSchema, value),
+    },
+  })
 
   useEffect(() => {
     if (user === null) {
       router.push(
-        `/login?error=${encodeURIComponent(
-          'You must be logged in to view this page.',
-        )}&redirect=${encodeURIComponent('/account')}`,
+        `/login?error=${encodeURIComponent('You must be logged in to view this page.')}&redirect=${encodeURIComponent('/account')}`,
       )
     }
-
-    // Once user is loaded, reset form to have default values
-    if (user) {
-      reset({
-        name: user.name,
-        email: user.email,
-        password: '',
-        passwordConfirm: '',
-      })
-    }
-  }, [user, router, reset, changePassword])
+  }, [user, router])
 
   return (
-    <form className="max-w-xl" onSubmit={handleSubmit(onSubmit)}>
+    <form
+      className="max-w-xl"
+      onSubmit={(e) => {
+        e.preventDefault()
+        e.stopPropagation()
+        form.handleSubmit()
+      }}
+    >
       {!changePassword ? (
         <Fragment>
           <div className="prose dark:prose-invert mb-8">
@@ -98,7 +78,7 @@ export const AccountForm: React.FC = () => {
               {'Change your account details below, or '}
               <Button
                 className="px-0 text-inherit underline hover:cursor-pointer"
-                onClick={() => setChangePassword(!changePassword)}
+                onClick={() => setChangePassword(true)}
                 type="button"
                 variant="link"
               >
@@ -107,30 +87,40 @@ export const AccountForm: React.FC = () => {
               {' to change your password.'}
             </p>
           </div>
-
           <div className="flex flex-col gap-8 mb-8">
             <FormItem>
-              <Label htmlFor="email" className="mb-2">
-                Email Address
-              </Label>
-              <Input
-                id="email"
-                {...register('email', { required: 'Please provide an email.' })}
-                type="email"
-              />
-              {errors.email && <FormError message={errors.email.message} />}
+              <form.Field name="email" validators={{ onChange: ({ value }) => (!value?.trim() ? 'Please provide an email.' : undefined) }}>
+                {(field) => (
+                  <>
+                    <Label htmlFor="email" className="mb-2">Email Address</Label>
+                    <Input
+                      id="email"
+                      type="email"
+                      value={field.state.value ?? ''}
+                      onBlur={field.handleBlur}
+                      onChange={(e) => field.handleChange(e.target.value)}
+                    />
+                    {field.state.meta.errors?.[0] && <FormError message={field.state.meta.errors[0]} />}
+                  </>
+                )}
+              </form.Field>
             </FormItem>
-
             <FormItem>
-              <Label htmlFor="name" className="mb-2">
-                Name
-              </Label>
-              <Input
-                id="name"
-                {...register('name', { required: 'Please provide a name.' })}
-                type="text"
-              />
-              {errors.name && <FormError message={errors.name.message} />}
+              <form.Field name="name" validators={{ onChange: ({ value }) => (!value?.trim() ? 'Please provide a name.' : undefined) }}>
+                {(field) => (
+                  <>
+                    <Label htmlFor="name" className="mb-2">Name</Label>
+                    <Input
+                      id="name"
+                      type="text"
+                      value={field.state.value ?? ''}
+                      onBlur={field.handleBlur}
+                      onChange={(e) => field.handleChange(e.target.value)}
+                    />
+                    {field.state.meta.errors?.[0] && <FormError message={field.state.meta.errors[0]} />}
+                  </>
+                )}
+              </form.Field>
             </FormItem>
           </div>
         </Fragment>
@@ -141,7 +131,7 @@ export const AccountForm: React.FC = () => {
               {'Change your password below, or '}
               <Button
                 className="px-0 text-inherit underline hover:cursor-pointer"
-                onClick={() => setChangePassword(!changePassword)}
+                onClick={() => setChangePassword(false)}
                 type="button"
                 variant="link"
               >
@@ -150,44 +140,70 @@ export const AccountForm: React.FC = () => {
               .
             </p>
           </div>
-
           <div className="flex flex-col gap-8 mb-8">
             <FormItem>
-              <Label htmlFor="password" className="mb-2">
-                New password
-              </Label>
-              <Input
-                id="password"
-                {...register('password', { required: 'Please provide a new password.' })}
-                type="password"
-              />
-              {errors.password && <FormError message={errors.password.message} />}
+              <form.Field name="password" validators={{ onChange: ({ value }) => (changePassword && !value ? 'Please provide a new password.' : undefined) }}>
+                {(field) => (
+                  <>
+                    <Label htmlFor="password" className="mb-2">New password</Label>
+                    <Input
+                      id="password"
+                      type="password"
+                      value={field.state.value}
+                      onBlur={field.handleBlur}
+                      onChange={(e) => field.handleChange(e.target.value)}
+                    />
+                    {field.state.meta.errors?.[0] && <FormError message={field.state.meta.errors[0]} />}
+                  </>
+                )}
+              </form.Field>
             </FormItem>
-
             <FormItem>
-              <Label htmlFor="passwordConfirm" className="mb-2">
-                Confirm password
-              </Label>
-              <Input
-                id="passwordConfirm"
-                {...register('passwordConfirm', {
-                  required: 'Please confirm your new password.',
-                  validate: (value) => value === password.current || 'The passwords do not match',
-                })}
-                type="password"
-              />
-              {errors.passwordConfirm && <FormError message={errors.passwordConfirm.message} />}
+              <form.Field
+                name="passwordConfirm"
+                validators={{
+                  onChange: ({ value }) => {
+                    if (!changePassword) return undefined
+                    if (!value) return 'Please confirm your new password.'
+                    return undefined
+                  },
+                  onSubmit: ({ value, fieldApi }) => {
+                    if (!changePassword) return undefined
+                    const password = fieldApi.form.getFieldValue('password')
+                    return value !== password ? 'The passwords do not match' : undefined
+                  },
+                }}
+              >
+                {(field) => (
+                  <>
+                    <Label htmlFor="passwordConfirm" className="mb-2">Confirm password</Label>
+                    <Input
+                      id="passwordConfirm"
+                      type="password"
+                      value={field.state.value}
+                      onBlur={field.handleBlur}
+                      onChange={(e) => field.handleChange(e.target.value)}
+                    />
+                    {field.state.meta.errors?.[0] && <FormError message={field.state.meta.errors[0]} />}
+                  </>
+                )}
+              </form.Field>
             </FormItem>
           </div>
         </Fragment>
       )}
-      <Button disabled={isLoading || isSubmitting || !isDirty} type="submit" variant="default">
-        {isLoading || isSubmitting
-          ? 'Processing'
-          : changePassword
-            ? 'Change Password'
-            : 'Update Account'}
-      </Button>
+      <form.Subscribe selector={(state) => [state.isSubmitting, state.isDirty]}>
+        {([isSubmitting, isDirty]) => {
+          let buttonText = 'Update Account'
+          if (isSubmitting) buttonText = 'Processing'
+          else if (changePassword) buttonText = 'Change Password'
+          return (
+            <Button disabled={isSubmitting || !isDirty} type="submit" variant="default">
+              {buttonText}
+            </Button>
+          )
+        }}
+      </form.Subscribe>
     </form>
   )
 }

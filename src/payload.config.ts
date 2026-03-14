@@ -16,6 +16,7 @@ import { fileURLToPath } from 'node:url'
 
 import { Categories } from '@/collections/Categories'
 import { Documents } from '@/collections/Documents'
+import { Inquiries } from '@/collections/Inquiries'
 import { Media } from '@/collections/Media'
 import { Members } from '@/collections/Members'
 import { Pages } from '@/collections/Pages'
@@ -40,7 +41,7 @@ export default buildConfig({
     },
     user: Users.slug,
   },
-  collections: [Users, Pages, Categories, Media, Documents, Members, Plans],
+  collections: [Users, Pages, Categories, Media, Documents, Members, Plans, Inquiries],
   db: postgresAdapter({
     pool: {
       connectionString: process.env.DATABASE_URL || '',
